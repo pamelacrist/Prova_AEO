@@ -1,71 +1,95 @@
 <?php
-include __DIR__ . "/header.php";
+include __DIR__ . "/header.php";  // Inclui o arquivo de cabeçalho
 ?>
 
 <?php
 
 try {
-    if (isset($_POST['email']) &&
-        isset($_POST['nome']) && 
-        isset($_POST['telefone'])&& 
-        isset($_POST['cpf']) && 
-        !isset($_GET['id'])) {
-           
+    if (
+        // Verifica se os campos do formulário 
+        //foram submetidos e se não há um 'id' na URL (para inserção de uma nova disciplina)
+        isset($_POST['nome']) &&
+        isset($_POST['sala']) &&
+        isset($_POST['cargaHoraria']) &&
+        isset($_POST['dataInicial']) &&
+        isset($_POST['dataFinal']) &&
+        empty($_GET['id'])  // Verifica se não há um ID na URL
+    ) {
+        // Inclui o arquivo de conexão com o banco de dados
         include_once __DIR__ . "/config/connection.php";
-        $email = $_POST['email'];
+        // Obtém os valores do formulário
         $nome = $_POST['nome'];
-        $telefone = $_POST['telefone'];
-        $cpf = $_POST['cpf'];
-        //$diciplina = $_POST['diciplina'];
+        $sala = $_POST['sala'];
+        $cargaHoraria = $_POST['cargaHoraria'];
+        $dataInicial = $_POST['dataInicial'];
+        $dataFinal = $_POST['dataFinal'];
 
-        $sql = "INSERT INTO disciplinas (nome, email, telefone , cpf)
-        VALUES (:nome, :email, :telefone, :cpf);";
-         
-        $pdo = $pdo->prepare($sql);
-        $pdo->bindParam(":email", $email);
-        $pdo->bindParam(":nome", $nome);
-        $pdo->bindParam(":telefone", $telefone);
-        $pdo->bindParam(":cpf", $cpf);
-        //$pdo->bindParam(":diciplina", $diciplina);
-        $pdo->execute();
-       
-        if ($pdo->rowCount() == 1) {
-           // $_SESSION['usuario'] = $pdo->fetch(PDO::FETCH_ASSOC)['email'];
-            header("Location: disciplina.php"); // https://www.php.net/manual/function.header.php
+        // Prepara a query SQL para inserir uma nova disciplina no banco de dados
+        $sql = "INSERT INTO disciplinas (nome, sala, cargaHoraria, dataInicial , dataFinal)
+        VALUES (:nome, :sala, :cargaHoraria, :dataInicial, :dataFinal);";
+
+        $mysql = $pdo->prepare($sql); // Prepara a query para execução
+        // Substitui os valores do SQL pelos valores do formulário
+        $mysql->bindParam(":nome", $nome);
+        $mysql->bindParam(":sala", $sala);
+        $mysql->bindParam(":cargaHoraria", $cargaHoraria);
+        $mysql->bindParam(":dataInicial", $dataInicial);
+        $mysql->bindParam(":dataFinal", $dataFinal);
+        $mysql->execute();
+
+        // Verifica se a inserção foi bem-sucedida e redireciona para outra página
+        if ($mysql->rowCount() == 1) {
+
+            header("Location: disciplina.php"); // Redireciona para a página de disciplinas
         }
-        // $user = $pdo->fetch(PDO::FETCH_ASSOC);
-        // session_start();
-        // $_SESSION['user'] = $user;
-
     }
-    if (isset($_POST['email']) &&
-        isset($_POST['nome']) && 
-        isset($_POST['telefone']) && 
-        isset($_POST['cpf']) && isset($_GET['id'])) {
-        include_once __DIR__ . "/config/connection.php";
-        $email = $_POST['email'];
+    if (
+        // Verifica se os campos do formulário
+        //foram submetidos e se há um 'id' na URL (para atualização de disciplina existente)
+        isset($_POST['nome']) &&
+        isset($_POST['sala']) &&
+        isset($_POST['cargaHoraria']) &&
+        isset($_POST['dataInicial']) &&
+        isset($_POST['dataFinal']) && isset($_GET['id'])
+    ) {
+
+        include_once __DIR__ . "/config/connection.php"; // Inclui o arquivo de conexão com o banco de dados
+        // Obtém os valores do formulário e o ID da disciplina
         $nome = $_POST['nome'];
-        $telefone = $_POST['telefone'];
-        $cpf = $_POST['cpf'];
+        $sala = $_POST['sala'];
+        $cargaHoraria = $_POST['cargaHoraria'];
+        $dataInicial = $_POST['dataInicial'];
+        $dataFinal = $_POST['dataFinal'];
         $id = $_GET['id'];
 
-        $sql = "UPDATE disciplinas SET nome = :nome, email = :email, telefone = :telefone, cpf = :cpf WHERE idDisciplina = :id";
-        
-        $pdo = $pdo->prepare($sql);
-        $pdo->bindParam(":email", $email);
-        $pdo->bindParam(":nome", $nome);
-        $pdo->bindParam(":telefone", $telefone);
-        $pdo->bindParam(":cpf", $cpf);
-        $pdo->bindParam(":id", $id);
-        $pdo->execute();
-    
-        if ($pdo->rowCount() == 1) {
+        // Prepara a query SQL para atualizar uma disciplina no banco de dados
+        $sql = "UPDATE disciplinas SET nome = :nome,
+          sala = :sala,
+          cargaHoraria = :cargaHoraria, 
+          dataInicial = :dataInicial, 
+          dataFinal = :dataFinal 
+          WHERE idDisciplina = :id";
+
+        $mysql = $pdo->prepare($sql); // Prepara a query
+        // Substitui os valores do SQL pelos valores do formulário
+        $mysql->bindParam(":nome", $nome);
+        $mysql->bindParam(":sala", $sala);
+        $mysql->bindParam(":cargaHoraria", $cargaHoraria);
+        $mysql->bindParam(":dataInicial", $dataInicial);
+        $mysql->bindParam(":dataFinal", $dataFinal);
+        $mysql->bindParam(":id", $id);
+        $mysql->execute(); // Executa a query
+
+        // Verifica se a atualização foi bem-sucedida e redireciona para outra página
+        if ($mysql->rowCount() == 1) {
             header("Location: disciplina.php");
         }
     }
-    if(isset($_GET['id'])){
-        include_once __DIR__ . "/config/connection.php";
+    // Verifica se há um ID na URL
+    if (isset($_GET['id'])) {
+        include_once __DIR__ . "/config/connection.php";  // Inclui o arquivo de conexão com o banco de dados
         $id = $_GET['id'];
+        // Prepara a query SQL para obter os dados da disciplina
         $sql = "SELECT * FROM disciplinas WHERE idDisciplina = :id";
         $pdo = $pdo->prepare($sql);
         $pdo->bindParam(":id", $id);
@@ -73,54 +97,53 @@ try {
         $disciplina = $pdo->fetch(PDO::FETCH_ASSOC);
     }
 } catch (\Throwable $th) {
-   var_dump($th);
-   exit();
+    var_dump($th);  // Imprime o erro
+    exit();
 }
-    
+
 
 
 ?>
 <main>
-    <div class="container-fluid py-5 bg-primary bg-gradient">
-        <h1 class="text-center text-light">Fale conosco</h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 bg-primary bg-gradient py-2 ">
+                <img width="100%" src="https://vestibular.sc.senac.br/img/elements/banner-page.jpg?rel=20190926">
+            </div>
+        </div>
     </div>
     <div class="container py-5">
         <div class="row">
             <div class="col-md-8">
                 <form action="disciplina_cadastro.php?id=<?php echo $disciplina['idDisciplina']; ?>" method="post">
                     <div>
-                        <label for="form_nome" class="form-label">Digite o seu nome</label>
-                        <input id="form_nome" value="<?php echo isset($disciplina['nome']) ? $disciplina['nome'] : ''; ?>" type="text" placeholder="Nome completo" name="nome" class="form-control"
-                            required>
+                        <label for="form_nome" class="form-label">Digite o nome da matéria</label>
+                        <input id="form_nome" value="<?php echo isset($disciplina['nome']) ? $disciplina['nome'] : ''; ?>" type="text" placeholder="Nome completo" name="nome" class="form-control" required>
                     </div>
                     <div class="mt-3">
-                        <label for="form_email" class="form-label">Digite o seu e-mail</label>
-                        <input id="form_email" value="<?php echo isset($disciplina['email']) ? $disciplina['email'] : ''; ?>" type="email" placeholder="eu@examepl.com" name="email"
-                            class="form-control" required>
+                        <label for="form_sala" class="form-label">Digite o numero da sala</label>
+                        <input id="form_sala" value="<?php echo isset($disciplina['sala']) ? $disciplina['sala'] : ''; ?>" type="text" name="sala" class="form-control" required>
                     </div>
                     <div class="mt-3">
-                        <label for="form_telefone" class="form-label">Digite o seu telefone</label>
-                        <input id="form_telefone" 
-                        value="<?php echo isset($disciplina['telefone']) ? $disciplina['telefone'] : ''; ?>" 
-                        type="text" placeholder="DDD + Completo" name="telefone"
-                            class="form-control" required>
-                    </div>
-                    <div class="mt-3">
-                        <label for="form_cpf" class="form-label">Digite o seu CPF</label>
-                        <input id="form_cpf" 
-                        value="<?php echo isset($disciplina['cpf']) ? $disciplina['cpf'] : ''; ?>"
-                        type="text" placeholder="CPF" name="cpf"
-                            class="form-control" required>
-                    </div>
+                        <label for="form_cargaHoraria" class="form-label">Digite a carga horária</label>
+                        <input id="form_cargaHoraria" value="<?php echo isset($disciplina['cargaHoraria']) ? $disciplina['cargaHoraria'] : ''; ?>" type="text" name="cargaHoraria" class="form-control" required>
+                        <div class="mt-3">
+                            <label for="form_dataInicial" class="form-label">Digite a data inicial</label>
+                            <input id="form_dataInicial" value="<?php echo isset($disciplina['dataInicial']) ?  date('Y-m-d', strtotime($disciplina['dataInicial'])) : ''; ?>" type="date" name="dataInicial" class="form-control" required>
+                        </div>
+                        <div class="mt-3">
+                            <label for="form_dataFinal" class="form-label">Digite a data final</label>
+                            <input id="form_dataFinal" value="<?php echo isset($disciplina['dataFinal']) ?  date('Y-m-d', strtotime($disciplina['dataFinal'])) : ''; ?>" type="date" name="dataFinal" class="form-control" required>
+                        </div>
 
-                    <div class="">
-                        <input type="submit" class="btn btn-primary mt-3" value="Enviar contato">
-                    </div>
+                        <div class="">
+                            <input type="submit" class="btn btn-primary mt-3" value="Salvar">
+                        </div>
                 </form>
             </div>
         </div>
     </div>
 </main>
 <?php
-include __DIR__ . "/footer.php";
+include __DIR__ . "/footer.php"; // Inclui o arquivo de rodapé
 ?>
