@@ -1,6 +1,5 @@
 <?php
 session_start();
-include_once 'header.php';
 if ($logado) {
     header("Location: index.php");
 }
@@ -61,7 +60,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit" class="btn">Entrar</button>
     </form>
 </div>
-
-<?php
-include_once 'footer.php';
-?>
