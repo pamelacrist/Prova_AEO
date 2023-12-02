@@ -29,15 +29,13 @@ if (isset($_GET['id'])) {
 ?>
 
 <main>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 bg-primary bg-gradient py-2 ">
-                <img width="100%" src="https://vestibular.sc.senac.br/img/elements/banner-page.jpg?rel=20190926">
-            </div>
-        </div>
+    <div class="container-fluid p-3" style="background-color: #17093e;">
+        <h1 class=" text-black text-center text-light" 
+            style="color: white !important;">
+            Listagem Professor
+        </h1>
     </div>
     <div class="container py-5">
-        <h1 class=" text-black text-center text-light">Listagem Professor</h1>
         <div class="mb-1 ms-1 m-4" style="display:flow-root">
             <a type="button" data-bs-toggle="collapse" data-bs-target="#searchForm" class="btn btn-primary float-start"><i class="fas fa-filter"></i></a>
             <div class=" d-inline-flex ms-2">

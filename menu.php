@@ -1,33 +1,47 @@
+<?php
+    session_start();
+    $logado = $_SESSION['usuario'];
+
+?>
+
 <header>
-    <!-- Início da barra de navegação -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container">
-            <!-- Logo da marca -->
-            <a class="navbar-brand" href="#"><img width="70" src="https://www.senac.br/images/logo-senac-cnc-color-100.png"></a>
-            <!-- Botão para expandir ou colapsar o menu em telas pequenas -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menusite" aria-controls="menusite" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Menu de navegação -->
-            <div class="collapse navbar-collapse" id="menusite">
-                <ul class="navbar-nav">
-                    <!-- Item do menu para a página inicial -->
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="index.php">Inicial</a>
-                    </li>
-                    <!-- Item do menu para a página do professor -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="professor.php">Professor</a>
-                    </li>
-                    <!-- Item do menu para a página do aluno -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="aluno.php">Aluno</a>
-                    </li>
-                    <!-- Item do menu para a página da disciplina -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="disciplina.php">Disciplina</a>
-                    </li>
-                </ul>
+    
+ <!-- Navbar Start -->
+ <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a class="navbar-brand" href="#"><img width="120" src="https://www.senac.br/images/logo-senac-cnc-color-100.png"></a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <!-- active -->
+                
+               
+                <?php  
+                if($logado) {
+                    if(!empty($logado['idProfessor'])) {
+                        ?>
+                        <a class="nav-item nav-link" href="professor.php">Professor</a>
+                    <a class="nav-item nav-link" href="aluno.php">Aluno</a>
+                    <a class="nav-item nav-link" href="disciplina.php">Disciplina</a>
+
+
+                        <?php
+                    }else{?>
+                    <a class="nav-item nav-link" aria-current="page" href="index.php">Inicial</a>
+
+                   <?php }
+                    ?>
+                    <a class="nav-item nav-link" href="sair.php">Sair</a>
+                    <?php
+                } else {
+                    ?>
+                    <a class="nav-item nav-link" aria-current="page" href="index.php">Inicial</a>
+                    <a class="nav-item nav-link" href="login.php">Entrar</a>
+                    <?php
+                }
+                ?>
+               
             </div>
         </div>
     </nav>

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "sass": "sass --watch ./src/scss/main.scss:./assets/css/main.css"
+    "sass": "sass --watch ./src/scss/main.scss:./assets/css/main.css",
+    "login": "sass --watch ./src/scss/login.scss:./assets/css/login.css"
   },
   "repository": {
     "type": "git",

@@ -11,13 +11,13 @@ if (isset($_GET['id'])) {
         $id = $_GET['id'];
         // Prepara e executa a consulta SQL para excluir o disciplina com base no ID
         $sql = "DELETE FROM disciplinas WHERE idDisciplina = :id";
-        $pdo = $pdo->prepare($sql);
-        $pdo->bindParam(":id", $id);
-        $pdo->execute();
-        $disciplina = $pdo->fetch(PDO::FETCH_ASSOC);
+        $mysql = $pdo->prepare($sql);
+        $mysql->bindParam(":id", $id);
+        $mysql->execute();
+        $disciplina = $mysql->fetch(PDO::FETCH_ASSOC);
 
         // Verifica se a exclusão foi bem-sucedida
-        if ($pdo->rowCount() == 1) {
+        if ($mysql->rowCount() == 1) {
             header("Location: disciplina.php"); // Redireciona para a página de listagem de disciplinas após a exclusão
         } else {
             echo "Não foi possível excluir o disciplina!"; // Caso a exclusão não tenha sido bem-sucedida, exibe uma mensagem
@@ -29,15 +29,13 @@ if (isset($_GET['id'])) {
 ?>
 
 <main>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 bg-primary bg-gradient py-2 ">
-                <img width="100%" src="https://vestibular.sc.senac.br/img/elements/banner-page.jpg?rel=20190926">
-            </div>
-        </div>
+    <div class="container-fluid p-3" style="background-color: #17093e;">
+        <h1 class=" text-black text-center text-light" 
+            style="color: white !important;">
+            Listagem Disciplina
+        </h1>
     </div>
     <div class="container py-5">
-        <h1 class=" text-black text-center text-light">Listagem Disciplina</h1>
         <div class="mb-1 ms-1 m-4" style="display:flow-root">
             <a type="button" data-bs-toggle="collapse" data-bs-target="#searchForm" class="btn btn-primary float-start"><i class="fas fa-filter"></i></a>
             <div class=" d-inline-flex ms-2">
